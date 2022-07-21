@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for wwsauth module.
+ */
+
+
+use Drupal\user\UserInterface;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_openid_connect_userinfo_save().
+ */
+function wwsauth_openid_connect_userinfo_save(UserInterface $account, array $context)
+{
+  if ($context['plugin_id'] !== 'WWSUmich') {
+    return;
+  }
+  $config = Drupal::config('openid_connect.settings.WWSUmich');
+  if (is_array($config->get('settings')['roles'])) {
+    ## Get all roles
+    $all_roles = [];
+    foreach (Role::loadMultiple() as $r) {
+      $all_roles[$r->label()] = $r->id();
+    }
+    foreach ($config->get('settings')['roles'] as $role) {
+
+      $account->removeRole($all_roles[$role]);
+    }
+
+    if (is_array($context['userinfo']['edumember_ismemberof'])) {
+      foreach ($context['userinfo']['edumember_ismemberof'] as $role) {
+        if (in_array($role, $config->get('settings')['roles'])) {
+
+          $account->addRole($all_roles[$role]);
+        }
+
+      }
+    }
+
+  }
+}
