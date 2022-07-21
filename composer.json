@@ -1,0 +1,19 @@
+{
+    "name": "mlhess/umichoidc",
+    "type": "drupal-module",
+    "description": "This module coordinates umich role and authentication with Drupal",
+    "homepage": "http://github.com/mlhess/umichoidc",
+    "authors": [
+        {
+            "name": "Michael Hess",
+            "homepage": "https://www.drupal.org/u/mlhess",
+            "role": "Maintainer"
+        }
+    ],
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "require": {
+        "drupal/core": "^8.9 || ^9",
+        "drupal/openid_connect": "^8.x-1.2"
+    }
+}
