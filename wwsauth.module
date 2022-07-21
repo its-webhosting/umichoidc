@@ -12,8 +12,7 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_openid_connect_userinfo_save().
  */
-function wwsauth_openid_connect_userinfo_save(UserInterface $account, array $context)
-{
+function wwsauth_openid_connect_userinfo_save(UserInterface $account, array $context) {
   if ($context['plugin_id'] !== 'WWSUmich') {
     return;
   }

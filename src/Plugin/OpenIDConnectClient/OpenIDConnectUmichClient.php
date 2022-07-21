@@ -16,8 +16,7 @@ use Drupal\user\Entity\Role;
  *   label = @Translation("WWSUmich")
  * )
  */
-class OpenIDConnectUmichClient extends OpenIDConnectClientBase
-{
+class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
 
   /**
    *
@@ -37,8 +36,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state)
-  {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
     $roles = Role::loadMultiple();
     $role_list = [];
@@ -53,14 +51,14 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase
       '#title' => $this->t('OIDC managed Roles'),
       '#options' => $role_list,
       '#default_value' => $this->configuration['roles'],
-      '#multiple' => True,
-      '#description' => 'Your role name must match your m-community group name.  Using this feature will override manual assigment of selected roles.'
+      '#multiple' => TRUE,
+      '#description' => 'Your role name must match your m-community group name.  Using this feature will override manual assigment of selected roles.',
     ];
     $form['testshib'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use testing instance of the IDP'),
       '#description' => 'Only check this box if directed to do so by ITS',
-      '#default_value' => $this->configuration['testshib']
+      '#default_value' => $this->configuration['testshib'],
     ];
     return $form;
   }
@@ -69,12 +67,12 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase
   /**
    * {@inheritdoc}
    */
-  public function getEndpoints()
-  {
+  public function getEndpoints() {
     if ($this->configuration['testshib'] == 1) {
       $service = json_decode(file_get_contents("https://shib-idp-staging.dsc.umich.edu/.well-known/openid-configuration"));
 
-    } else {
+    }
+    else {
       $service = json_decode(file_get_contents("https://shibboleth.umich.edu/.well-known/openid-configuration"));
     }
     return [
@@ -87,24 +85,21 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase
   /**
    * {@inheritdoc}
    */
-  public function authorize($scope = '')
-  {
+  public function authorize($scope = '') {
     return parent::authorize('openid email edumember profile  account_type');
   }
 
   /**
    * {@inheritdoc}
    */
-  public function decodeIdToken($id_token)
-  {
+  public function decodeIdToken($id_token) {
     return [];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function XretrieveUserInfo($access_token)
-  {
+  public function XretrieveUserInfo($access_token) {
     $request_options = [
       'headers' => [
         'Authorization' => 'Bearer ' . $access_token,
@@ -117,7 +112,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase
     try {
       $claims = [];
       $response = $client->get($endpoints['userinfo'], $request_options);
-      $response_data = json_decode((string)$response->getBody(), TRUE);
+      $response_data = json_decode((string) $response->getBody(), TRUE);
 
       foreach ($this->userInfoMapping as $claim => $key) {
         if (array_key_exists($key, $response_data)) {
@@ -140,7 +135,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase
       // find out the user's email address(es).
       if (empty($claims['email'])) {
         $email_response = $client->get($endpoints['userinfo'] . '/emails', $request_options);
-        $email_response_data = json_decode((string)$email_response->getBody(), TRUE);
+        $email_response_data = json_decode((string) $email_response->getBody(), TRUE);
 
         foreach ($email_response_data as $email) {
           if (!empty($email['primary'])) {
