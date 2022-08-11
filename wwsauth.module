@@ -17,7 +17,7 @@ function wwsauth_openid_connect_userinfo_save(UserInterface $account, array $con
     return;
   }
   $config = Drupal::config('openid_connect.settings.WWSUmich');
-  if (is_array($config->get('settings')['roles'])) {
+  if (@is_array($config->get('settings')['roles'])) {
     ## Get all roles
     $all_roles = [];
     foreach (Role::loadMultiple() as $r) {
@@ -27,8 +27,7 @@ function wwsauth_openid_connect_userinfo_save(UserInterface $account, array $con
 
       $account->removeRole($all_roles[$role]);
     }
-
-    if (is_array($context['userinfo']['edumember_ismemberof'])) {
+    if (array_key_exists('edumember_ismemberof',$context['userinfo'])) {
       foreach ($context['userinfo']['edumember_ismemberof'] as $role) {
         if (in_array($role, $config->get('settings')['roles'])) {
 
