@@ -26,7 +26,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
     $roles = Role::loadMultiple();
     $role_list = [];
     foreach ($roles as $i => $v) {
-      if (!in_array($i, ['anonymous', 'authenticated', 'administrator'])) {
+      if (!in_array($i, ['anonymous', 'authenticated', 'administrator', 'content_editor'])) {
         $role_list[$v->label()] = $v->label();
       }
     }
