@@ -13,25 +13,10 @@ use Drupal\user\Entity\Role;
  *
  * @OpenIDConnectClient(
  *   id = "WWSUmich",
- *   label = @Translation("WWSUmich")
+ *   label = @Translation("Wolverine Web Services")
  * )
  */
 class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
-
-  /**
-   *
-   * @var array
-   */
-  protected array $userInfoMapping = [
-    'name' => 'name',
-    'sub' => 'id',
-    'email' => 'email',
-    'preferred_username' => 'login',
-    'picture' => 'avatar_url',
-    'profile' => 'html_url',
-    'website' => 'blog',
-  ];
-
 
   /**
    * {@inheritdoc}
@@ -44,7 +29,6 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
       if (!in_array($i, ['anonymous', 'authenticated', 'administrator'])) {
         $role_list[$v->label()] = $v->label();
       }
-
     }
     $form['roles'] = [
       '#type' => 'select',
@@ -52,7 +36,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
       '#options' => $role_list,
       '#default_value' => $this->configuration['roles'],
       '#multiple' => TRUE,
-      '#description' => 'Your role name must match your m-community group name.  Using this feature will override manual assigment of selected roles.',
+      '#description' => 'An OIDC managed role name must match an m-community group name. Roles selected here will be managed by the OIDC login process and not manually assignable.',
     ];
     $form['testshib'] = [
       '#type' => 'checkbox',
@@ -94,6 +78,22 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
    */
   public function decodeIdToken($id_token) {
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    $client_id = $form_state->getValue('client_id');
+    if ($client_id) {
+      // Remove newlines and leading/trailing whitespace.
+      $form_state->setValue('client_id', preg_replace( "/\r|\n/", "", trim($client_id)));
+    }
+    $client_secret = $form_state->getValue('client_secret');
+    if ($client_secret) {
+      // Remove newlines and leading/trailing whitespace.
+      $form_state->setValue('client_secret', preg_replace( "/\r|\n/", "", trim($client_secret)));
+    }
   }
 
 }

@@ -5,7 +5,6 @@
  * Primary module hooks for wwsauth module.
  */
 
-
 use Drupal\user\UserInterface;
 use Drupal\user\Entity\Role;
 
@@ -17,25 +16,26 @@ function wwsauth_openid_connect_userinfo_save(UserInterface $account, array $con
     return;
   }
   $config = Drupal::config('openid_connect.settings.WWSUmich');
-  if (@is_array($config->get('settings')['roles'])) {
-    ## Get all roles
-    $all_roles = [];
-    foreach (Role::loadMultiple() as $r) {
-      $all_roles[$r->label()] = $r->id();
-    }
-    foreach ($config->get('settings')['roles'] as $role) {
+  $roles = $config->get('settings')['roles'] ?? FALSE;
+  if(!$roles || !is_array($roles)) {
+    return;
+  }
 
-      $account->removeRole($all_roles[$role]);
-    }
-    if (array_key_exists('edumember_ismemberof',$context['userinfo'])) {
-      foreach ($context['userinfo']['edumember_ismemberof'] as $role) {
-        if (in_array($role, $config->get('settings')['roles'])) {
+  ## Get all roles
+  $all_roles = [];
+  foreach (Role::loadMultiple() as $r) {
+    $all_roles[$r->label()] = $r->id();
+  }
+  foreach ($roles as $role) {
+    $account->removeRole($all_roles[$role]);
+  }
 
-          $account->addRole($all_roles[$role]);
-        }
-
+  if ( isset($context['userinfo']['edumember_ismemberof']) && is_array($context['userinfo']['edumember_ismemberof'])) {
+    foreach ($context['userinfo']['edumember_ismemberof'] as $role) {
+      if (in_array($role, $roles)) {
+        $account->addRole($all_roles[$role]);
       }
     }
-
   }
+
 }

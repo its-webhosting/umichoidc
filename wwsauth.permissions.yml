@@ -1,4 +1,0 @@
-administer wwsauth configuration:
-  title: 'Administer wwsauth configuration'
-  description: 'Optional description.'
-  restrict access: true
