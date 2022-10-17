@@ -1,0 +1,92 @@
+<?php
+
+/**
+ * Adds a dedicated openid login page.
+ */
+function umichoidc_menu() {
+ $items['user/openid-login'] = [
+   'title' => 'Wolverine Web Services Login',
+   'page callback' => 'umichoidc_login_block_content',
+   'access callback' => TRUE,
+ ];
+  return $items;
+}
+
+/**
+ * Provide the openid login form when unauthenticated.
+ *
+ * If authenticated, redirect to the user page.
+ */
+function umichoidc_login_block_content() {
+  if (user_is_anonymous()) {
+    $block = module_invoke('openid_connect', 'block_view', 'openid_connect_login');
+    return $block['content'];
+  }
+  drupal_goto('user');
+}
+
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function umichoidc_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'openid_connect') {
+    return "plugins/$plugin";
+  }
+}
+
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Displays a link to the openid login form if "Add to standard login form" is
+ * enabled in the WWSUMICH openid config.
+ */
+function umichoidc_form_alter(&$form, &$form_state, $form_id) {
+  $client_settings = variable_get('openid_connect_client_umichoidc');
+  if (in_array($form_id, ['user_login', 'user_login_block']) && !empty($client_settings) && !empty($client_settings['link_openid_on_login_form'])) {
+    $form['openid_login'] = [
+      '#type' => 'link',
+      '#title' => t('Log in with Wolverine Web Services'),
+      '#href' => 'user/openid-login',
+    ];
+  }
+}
+
+/**
+ * Implements hook_openid_connect_post_authorize().
+ *
+ * Assigns corresponding m-commmunity roles. More details in the function body.
+ */
+function umichoidc_openid_connect_post_authorize(array $tokens, $account, array $userinfo, $client_name, $is_new) {
+  if ($client_name !== 'umichoidc') {
+    return;
+  }
+  $client_settings = variable_get('openid_connect_client_umichoidc');
+
+  // Only proceed if the WWS OIDC config has roles it is managing.
+  if (empty($client_settings) || empty($client_settings['roles']) || !is_array($client_settings['roles'])) {
+    return;
+  }
+
+  $oidc_roles = $client_settings['roles'];
+  $all_roles = array_flip(user_roles());
+  // Remove all previously set OIDC managed roles
+  foreach($oidc_roles as $oidc_role) {
+    user_multiple_role_edit([$account->uid], 'remove_role', $oidc_role);
+  }
+
+  if (isset($userinfo['edumember_ismemberof']) && is_array($userinfo['edumember_ismemberof'])) {
+    // Go through all m-community groups the user is a member of.
+    foreach ($userinfo['edumember_ismemberof'] as $memberof) {
+      // If the user belongs to an m-community group that:
+      // - has a name that corresponds matches the name of a role on the site
+      //   that is also an OIDC managed role
+      // - is among the "Groups released" in the OIDC client configuration
+      // Then assign that role to the user.
+      if (isset($all_roles[$memberof]) && isset($oidc_roles[$all_roles[$memberof]])) {
+        user_multiple_role_edit([$account->uid], 'add_role', $all_roles[$memberof]);
+      }
+    }
+  }
+}
