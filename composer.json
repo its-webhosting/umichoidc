@@ -1,5 +1,5 @@
 {
-    "name": "mlhess/umichoidc",
+    "name": "its-webhosting/umichoidc",
     "type": "drupal-module",
     "description": "This module coordinates umich role and authentication with Drupal",
     "homepage": "http://github.com/mlhess/umichoidc",
