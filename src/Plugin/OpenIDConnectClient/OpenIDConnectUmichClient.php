@@ -3,6 +3,7 @@
 namespace Drupal\wwsauth\Plugin\OpenIDConnectClient;
 
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Drupal\openid_connect\Plugin\OpenIDConnectClientBase;
 use Drupal\user\Entity\Role;
 
@@ -69,7 +70,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
   /**
    * {@inheritdoc}
    */
-  public function authorize(string $scope = 'email edumember profile account_type', array $additional_params = []): Symfony\Component\HttpFoundation\Response {
+  public function authorize(string $scope = 'openid email', array $additional_params = []): Response {
     return parent::authorize('openid email edumember profile account_type');
   }
 
