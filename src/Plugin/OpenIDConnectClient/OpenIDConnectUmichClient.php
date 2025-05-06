@@ -69,8 +69,8 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
   /**
    * {@inheritdoc}
    */
-  public function authorize($scope = '') {
-    return parent::authorize('openid email edumember profile  account_type');
+  public function authorize(string $scope = 'email edumember profile account_type', array $additional_params = []): Symfony\Component\HttpFoundation\Response {
+    return parent::authorize('openid email edumember profile account_type');
   }
 
   /**
