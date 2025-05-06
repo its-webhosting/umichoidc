@@ -51,7 +51,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
   /**
    * {@inheritdoc}
    */
-  public function getEndpoints() {
+  public function getEndpoints(): array {
     if ($this->configuration['testshib'] == 1) {
       $service = json_decode(file_get_contents("https://shib-idp-staging.dsc.umich.edu/.well-known/openid-configuration"));
 
