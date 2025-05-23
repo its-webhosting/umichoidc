@@ -15,7 +15,7 @@ function wwsauth_openid_connect_userinfo_save(UserInterface $account, array $con
   if ($context['plugin_id'] !== 'WWSUmich') {
     return;
   }
-  $config = Drupal::config('openid_connect.settings.WWSUmich');
+  $config = Drupal::config('openid_connect.client.wwsumich');
   $roles = $config->get('settings')['roles'] ?? FALSE;
   if(!$roles || !is_array($roles)) {
     return;

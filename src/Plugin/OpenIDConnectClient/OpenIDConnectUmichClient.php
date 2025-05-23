@@ -3,6 +3,7 @@
 namespace Drupal\wwsauth\Plugin\OpenIDConnectClient;
 
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Drupal\openid_connect\Plugin\OpenIDConnectClientBase;
 use Drupal\user\Entity\Role;
 
@@ -21,7 +22,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form = parent::buildConfigurationForm($form, $form_state);
     $roles = Role::loadMultiple();
     $role_list = [];
@@ -51,7 +52,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
   /**
    * {@inheritdoc}
    */
-  public function getEndpoints() {
+  public function getEndpoints(): array {
     if ($this->configuration['testshib'] == 1) {
       $service = json_decode(file_get_contents("https://shib-idp-staging.dsc.umich.edu/.well-known/openid-configuration"));
 
@@ -69,8 +70,8 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
   /**
    * {@inheritdoc}
    */
-  public function authorize($scope = '') {
-    return parent::authorize('openid email edumember profile  account_type');
+  public function authorize(string $scope = 'openid email', array $additional_params = []): Response {
+    return parent::authorize('openid email edumember profile account_type');
   }
 
   /**
