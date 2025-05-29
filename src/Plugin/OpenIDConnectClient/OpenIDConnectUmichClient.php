@@ -13,7 +13,7 @@ use Drupal\user\Entity\Role;
  * Implements OpenID Connect Client plugin for WWS.
  *
  * @OpenIDConnectClient(
- *   id = "WWSUmich",
+ *   id = "wwsumich",
  *   label = @Translation("Wolverine Web Services")
  * )
  */

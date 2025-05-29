@@ -4,8 +4,8 @@ dependencies:
   module:
     - wwsauth
 id: wwsumich
-label: WWSUmich
-plugin: WWSUmich
+label: wwsumich
+plugin: wwsumich
 settings:
   client_id: ''
   client_secret: ''
