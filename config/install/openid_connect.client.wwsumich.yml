@@ -4,7 +4,7 @@ dependencies:
   module:
     - wwsauth
 id: wwsumich
-label: wwsumich
+label: 'Wolverine Web Services'
 plugin: wwsumich
 settings:
   client_id: ''

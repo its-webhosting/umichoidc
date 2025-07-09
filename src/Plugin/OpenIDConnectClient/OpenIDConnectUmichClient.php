@@ -37,7 +37,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
       '#options' => $role_list,
       '#default_value' => $this->configuration['roles'],
       '#multiple' => TRUE,
-      '#description' => 'An OIDC managed role name must match an m-community group name. Roles selected here will be managed by the OIDC login process and not manually assignable.',
+      '#description' => 'An OIDC managed role name must match an MCommunity group name. Roles selected here will be managed by the OIDC login process and not manually assignable.',
     ];
     $form['testshib'] = [
       '#type' => 'checkbox',
