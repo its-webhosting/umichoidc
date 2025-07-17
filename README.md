@@ -34,7 +34,7 @@ Older Drupal 11 sites in U-M Pantheon will need to have these modules installed 
 
 Drupal 11 sites hosted outside of U-M Pantheon will require installation and configuration according to your external vendor's specifications.
 
-To Install **umichoidc** via the command line (CLI) into a U-M Pantheon site:
+To Install **umichoidc** via the command line (CLI) into a U-M Pantheon site that was created prior to OIDC provisioning integration:
 
 * Prerequisites
 
@@ -117,19 +117,19 @@ Substitute values for "${uid}" and "${uniqname}" into sql statement below:
 terminus drush -n ${SITE}.${ENV} -- sql:query "INSERT INTO authmap (uid, provider, authname, data) VALUES (${uid}, \"openid_connect.wwsumich\", \"${uniqname}\", \"N;\");"`
 ```
 
-6. Commit changes
+7. Commit changes
 
 ```bash
 terminus env:commit --message "install/configure openid_connect" --force -- ${SITE}.${ENV}`
 ```
 
-7. Change back to git mode
+8. Change back to git mode
 
 ```bash
 terminus connection:set ${SITE}.${ENV} git`
 ```
 
-8. Rebuild cache
+9. Rebuild cache
 `terminus drush -n ${SITE}.${ENV} -- cache:rebuild`
 
 
