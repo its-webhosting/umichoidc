@@ -12,10 +12,10 @@ use Drupal\user\Entity\Role;
  * Implements hook_openid_connect_userinfo_save().
  */
 function wwsauth_openid_connect_userinfo_save(UserInterface $account, array $context) {
-  if ($context['plugin_id'] !== 'WWSUmich') {
+  if ($context['plugin_id'] !== 'wwsumich') {
     return;
   }
-  $config = Drupal::config('openid_connect.settings.WWSUmich');
+  $config = Drupal::config('openid_connect.client.wwsumich');
   $roles = $config->get('settings')['roles'] ?? FALSE;
   if(!$roles || !is_array($roles)) {
     return;

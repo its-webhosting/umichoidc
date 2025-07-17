@@ -3,6 +3,7 @@
 namespace Drupal\wwsauth\Plugin\OpenIDConnectClient;
 
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Drupal\openid_connect\Plugin\OpenIDConnectClientBase;
 use Drupal\user\Entity\Role;
 
@@ -12,7 +13,7 @@ use Drupal\user\Entity\Role;
  * Implements OpenID Connect Client plugin for WWS.
  *
  * @OpenIDConnectClient(
- *   id = "WWSUmich",
+ *   id = "wwsumich",
  *   label = @Translation("Wolverine Web Services")
  * )
  */
@@ -21,7 +22,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form = parent::buildConfigurationForm($form, $form_state);
     $roles = Role::loadMultiple();
     $role_list = [];
@@ -36,7 +37,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
       '#options' => $role_list,
       '#default_value' => $this->configuration['roles'],
       '#multiple' => TRUE,
-      '#description' => 'An OIDC managed role name must match an m-community group name. Roles selected here will be managed by the OIDC login process and not manually assignable.',
+      '#description' => 'An OIDC managed role name must match an MCommunity group name. Roles selected here will be managed by the OIDC login process and not manually assignable.',
     ];
     $form['testshib'] = [
       '#type' => 'checkbox',
@@ -51,7 +52,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
   /**
    * {@inheritdoc}
    */
-  public function getEndpoints() {
+  public function getEndpoints(): array {
     if ($this->configuration['testshib'] == 1) {
       $service = json_decode(file_get_contents("https://shib-idp-staging.dsc.umich.edu/.well-known/openid-configuration"));
 
@@ -69,8 +70,8 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
   /**
    * {@inheritdoc}
    */
-  public function authorize($scope = '') {
-    return parent::authorize('openid email edumember profile  account_type');
+  public function authorize(string $scope = 'openid email', array $additional_params = []): Response {
+    return parent::authorize('openid email edumember profile account_type');
   }
 
   /**
