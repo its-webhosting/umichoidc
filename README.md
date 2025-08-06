@@ -75,13 +75,13 @@ terminus connection:set ${SITE}.${ENV} sftp
 
 Drupal 10.5+ sites in U-M Pantheon that have the older release (v1.0.x) of `umichoidc (wwsauth)` and the dependency of `openid_connect` (8.x-1.x) will need to first uninstall the old versions before proceeding with the installation of the new versions of the modules.
 
-Drupal 10 sites that do *not* have the old versions of the modules installed should skip this step and proceed to step 4.  Drupal 11 sites should also proceed to step 4 as the older versions of these modules will not install on Drupal 11 sites anyway so they will not be present in Drupal 11 sites.
+Drupal 10 sites that do *not* have the old versions of the modules installed should skip this step and proceed to [step 4](README.md#step-4-anchor-point).  Drupal 11 sites should also proceed to [step 4](README.md#step-4-anchor-point) as the older versions of these modules will not install on Drupal 11 sites anyway so they will not be present in Drupal 11 sites.
 
 NOTE:  On U-M Pantheon, it is much more difficult to uninstall the old versions and then install & configure the new versions of the modules *AND* propogate those changes from `dev` to `test` and `live` environments, due to the way code changes and database changes are handled via the [Pantheon WebOps Workflow](https://docs.pantheon.io/pantheon-workflow).  
 
 This upgrade requires both code changes as well as database changes.
 
-If your site is hosting on U-M Pantheon and you have the old modules already deployed to `test` and/or `live`, you will likely need to develop a maintenance plan involving downtime for your `live` environment.  If your site is in this particular situation, you may wish to reach out to "webmaster@umich.edu" for assistance.
+If your site is hosting on U-M Pantheon and you have the old modules already deployed to `test` and/or `live`, you will likely need to develop a maintenance plan involving downtime for your `live` environment.  If your site is in this particular situation, you may wish to reach out to webmaster@umich.edu for assistance.
 
 To upgrade your Drupal 10 site's `dev` environment:
 
@@ -97,6 +97,7 @@ terminus drush -n ${SITE}.${ENV} -- pm:list --type=module --no-core
 terminus drush -n ${SITE}.${ENV} -- pm:uninstall wwsauth openid_connect
 ```
 
+<a name="step-4-anchor-point"></a>
 4. Install & enable **_openid_connect_** and **_umichoidc (wwsauth)_** modules
 
 ```bash
