@@ -177,6 +177,6 @@ terminus drush -n ${SITE}.${ENV} -- cache:rebuild
 For more details, refer to [the documentation from the University of Michigan](https://documentation.its.umich.edu/node/5423).
 
 
-### How can I report an issue, get help, request a feature, or help with module development? {#howtohelp}
+### How can I report an issue, get help, request a feature, or help with module development?
 
 [Open a GitHub issue](https://github.com/its-webhosting/umichoidc/issues) or email [webmaster@umich.edu](mailto:webmaster@umich.edu)
