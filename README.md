@@ -85,13 +85,13 @@ If your site is hosting on U-M Pantheon and you have the old modules already dep
 
 To upgrade your Drupal 10 site's `dev` environment:
 
-  a. Confirm that the old modules are installed and activated in the site with the following command:
+    a. Confirm that the old modules are installed and activated in the site with the following command:
 
 ```bash
 terminus drush -n ${SITE}.${ENV} -- pm:list --type=module --no-core
 ```
 
-  b. Uninstall both modules (`openid_connect`, `wwsauth`)
+    b. Uninstall both modules (`openid_connect`, `wwsauth`)
 
 ```bash
 terminus drush -n ${SITE}.${ENV} -- pm:uninstall wwsauth openid_connect
