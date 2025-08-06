@@ -4,25 +4,25 @@ umichoidc (wwsauth) is a Drupal module that extends the OpenID Connect (openid_c
 
 ## Quick Links
 
-* [Versions](#versions)
+* [Versions](README.md#versions)
 
-* [Features](#features)
+* [Features](README.md#features)
 
-* [Install](#install)
+* [Install](README.md#install)
 
-* [Documentation](#documentation)
+* [Documentation](README.md#documentation)
 
-* [How can I report an issue, get help, request a feature, or help with module development?](#howtohelp)
+* [How can I report an issue, get help, request a feature, or help with module development?](README.md#how-can-i-report-an-issue-get-help-request-a-feature-or-help-with-module-development-howtohelp)
 
 
 
-## Versions {#versions}
+## Versions
 
 * 3.x - This release of umichoidc (wwsauth) is dependent upon the [3.0.0-alpha6](https://www.drupal.org/project/openid_connect/releases/3.0.0-alpha6) release of the openid_connect module.  This version of umichoidc (wwsauth) has been tested with and is supported for Drupal 10.5+ through Drupal 11.
 
 * 1.0.x - The initial release of umichoidc (wwsauth) was dependent upon the [8.x-1.4](https://www.drupal.org/project/openid_connect/releases/8.x-1.4) release of the openid_connect module.  This version works with Drupal 9.5 - 10.  This release is still supported currently for Drupal 10 sites in U-M Pantheon, although support for 1.0.x with Drupal 10 in U-M Pantheon will soon be updated to 3.x.
 
-## Features {#features}
+## Features
 
 * Allows use of U-M MCommunity groups to manage as Roles in Drupal and Role Permissions with the same granularity as native Roles in Drupal.
 * Module adds/removes MCommunity groups based Roles for the user as they login
@@ -33,7 +33,7 @@ umichoidc (wwsauth) is a Drupal module that extends the OpenID Connect (openid_c
     * [Shibboleth](https://www.shibboleth.net/) OIDC using the `edumember_ismemberof` attribute for LDAP group membership.
 
 
-## Install {#install}
+## Install
 
 ### Requirements
 * Drupal 10.5 or later
@@ -170,7 +170,7 @@ terminus connection:set ${SITE}.${ENV} git
 terminus drush -n ${SITE}.${ENV} -- cache:rebuild
 ```
 
-### Documentation {#documentation}
+### Documentation
 
 For more details, refer to [the documentation from the University of Michigan](https://documentation.its.umich.edu/node/5423).
 
