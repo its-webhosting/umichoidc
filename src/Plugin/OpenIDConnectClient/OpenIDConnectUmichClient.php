@@ -55,14 +55,14 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
    */
   function getEndpoints(): array {
     // Load the well-known URL from configuration instead of hardcoding
-    $well_known_url = \Drupal::config('openid_connect.client.wwsumich')
-      ->get('oidc_well_known');
+    //$well_known_url = \Drupal::config('openid_connect.client.wwsumich')
+    //  ->get('oidc_well_known');
 
     // Fallback to a default if not set (optional, based on your needs)
-    if (empty($well_known_url)) {
-      \Drupal::logger('openid_connect')->error('OIDC well-known URL is not configured.');
-      return [];
-    }
+    //if (empty($well_known_url)) {
+    //  \Drupal::logger('openid_connect')->error('OIDC well-known URL is not configured.');
+    //  return [];
+    //}
 
     try {
       // Fetch the well-known configuration
