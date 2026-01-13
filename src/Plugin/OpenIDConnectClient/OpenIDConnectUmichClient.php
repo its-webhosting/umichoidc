@@ -40,7 +40,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
       '#description' => 'An OIDC managed role name must match an MCommunity group name. Roles selected here will be managed by the OIDC login process and not manually assignable.',
     ];
     $form['oidc_well_known'] = [
-      '#type' => 'textfield',
+      '#type' => 'url',
       '#title' => $this->t('OpenID Connect well-known endpoint URL'),
       '#default_value' => $this->configuration['oidc_well_known'],
     ];
@@ -55,20 +55,37 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
    */
   function getEndpoints(): array {
     // Load the well-known URL from configuration instead of hardcoding
-    //$well_known_url = \Drupal::config('openid_connect.client.wwsumich')
-    //  ->get('oidc_well_known');
+    $well_known_url = \Drupal::config('openid_connect.client.wwsumich')
+      ->get('oidc_well_known');
 
-    // Fallback to a default if not set (optional, based on your needs)
-    //if (empty($well_known_url)) {
-    //  \Drupal::logger('openid_connect')->error('OIDC well-known URL is not configured.');
-    //  return [];
-    //}
+    // Validate the configuration value
+    if (empty($well_known_url) || !is_string($well_known_url)) {
+      \Drupal::logger('openid_connect')->error('OIDC well-known URL is not configured or is invalid.');
+      return [];
+    }
+
+    // Trim whitespace and validate URL format
+    $well_known_url = trim($well_known_url);
+    if (!filter_var($well_known_url, FILTER_VALIDATE_URL)) {
+      \Drupal::logger('openid_connect')->error('OIDC well-known URL is not a valid URL: @url', [
+        '@url' => $well_known_url,
+      ]);
+      return [];
+    }
 
     try {
       // Fetch the well-known configuration
       $client = \Drupal::httpClient();
       $response = $client->get($well_known_url);
       $data = json_decode($response->getBody()->getContents(), TRUE);
+
+      // Validate JSON parsing
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        \Drupal::logger('openid_connect')->error('Failed to parse OIDC well-known response: @error', [
+          '@error' => json_last_error_msg(),
+        ]);
+        return [];
+      }
 
       return [
         'authorization' => $data['authorization_endpoint'] ?? '',
