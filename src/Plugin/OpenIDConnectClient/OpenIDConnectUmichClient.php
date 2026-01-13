@@ -39,32 +39,49 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
       '#multiple' => TRUE,
       '#description' => 'An OIDC managed role name must match an MCommunity group name. Roles selected here will be managed by the OIDC login process and not manually assignable.',
     ];
-    $form['testshib'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Use testing instance of the IDP'),
-      '#description' => 'Only check this box if directed to do so by ITS',
-      '#default_value' => $this->configuration['testshib'],
+    $form['oidc_well_known'] = [
+      '#type' => 'url',
+      '#title' => $this->t('OpenID Connect well-known endpoint URL'),
+      '#default_value' => $this->configuration['oidc_well_known'],
     ];
     return $form;
   }
 
-
   /**
-   * {@inheritdoc}
+   * Get OpenID Connect endpoints from well-known configuration.
+   *
+   * @return array
+   *   Array containing the authorization and token endpoints.
    */
-  public function getEndpoints(): array {
-    if ($this->configuration['testshib'] == 1) {
-      $service = json_decode(file_get_contents("https://shib-idp-staging.dsc.umich.edu/.well-known/openid-configuration"));
+  function getEndpoints() {
+    // Load the well-known URL from configuration instead of hardcoding
+    $well_known_url = \Drupal::config('openid_connect.client.wwsumich')
+      ->get('oidc_well_known');
 
+    // Fallback to a default if not set (optional, based on your needs)
+    if (empty($well_known_url)) {
+      \Drupal::logger('openid_connect')->error('OIDC well-known URL is not configured.');
+      return [];
     }
-    else {
-      $service = json_decode(file_get_contents("https://shibboleth.umich.edu/.well-known/openid-configuration"));
+
+    try {
+      // Fetch the well-known configuration
+      $client = \Drupal::httpClient();
+      $response = $client->get($well_known_url);
+      $data = json_decode($response->getBody()->getContents(), TRUE);
+
+      return [
+        'authorization' => $data['authorization_endpoint'] ?? '',
+        'token' => $data['token_endpoint'] ?? '',
+        'userinfo' => $data['userinfo_endpoint'] ?? '',
+      ];
     }
-    return [
-      'authorization' => $service->authorization_endpoint,
-      'token' => $service->token_endpoint,
-      'userinfo' => $service->userinfo_endpoint,
-    ];
+    catch (\Exception $e) {
+      \Drupal::logger('openid_connect')->error('Failed to fetch OIDC endpoints: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      return [];
+    }
   }
 
   /**
