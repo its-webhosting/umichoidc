@@ -53,7 +53,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
    * @return array
    *   Array containing the authorization and token endpoints.
    */
-  function getEndpoints() {
+  function getEndpoints(): array {
     // Load the well-known URL from configuration instead of hardcoding
     $well_known_url = \Drupal::config('openid_connect.client.wwsumich')
       ->get('oidc_well_known');
