@@ -40,7 +40,7 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
       '#description' => 'An OIDC managed role name must match an MCommunity group name. Roles selected here will be managed by the OIDC login process and not manually assignable.',
     ];
     $form['oidc_well_known'] = [
-      '#type' => 'url',
+      '#type' => 'textfield',
       '#title' => $this->t('OpenID Connect well-known endpoint URL'),
       '#default_value' => $this->configuration['oidc_well_known'],
     ];
