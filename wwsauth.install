@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the UMich OIDC module.
+ */
+
+/**
+ * Normalize the WWSUmich provider ID after the External Auth schema update.
+ */
+function wwsauth_update_10001(): string {
+  $updated = \Drupal::database()
+    ->update('authmap')
+    ->fields([
+      'provider' => 'openid_connect.wwsumich',
+    ])
+    ->condition('provider', 'openid_connect.WWSUmich')
+    ->execute();
+
+  return \Drupal::translation()
+    ->formatPlural(
+      $updated,
+      'Updated 1 External Auth mapping.',
+      'Updated @count External Auth mappings.',
+    );
+}
