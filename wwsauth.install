@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the UMich OIDC module.
+ */
+
+/**
+ * Normalize the WWSUmich provider ID after the External Auth schema update.
+ */
+function wwsauth_update_10001(): string {
+  $updated = \Drupal::database()
+    ->update('authmap')
+    ->fields([
+      'provider' => 'openid_connect.wwsumich',
+    ])
+    ->condition('provider', 'openid_connect.WWSUmich')
+    ->execute();
+
+  return \Drupal::translation()
+    ->formatPlural(
+      $updated,
+      'Updated 1 External Auth mapping.',
+      'Updated @count External Auth mappings.',
+    );
+}
+
+/**
+ * Replaces the testshib setting with the appropriate discovery endpoint.
+ */
+function umichoidc_update_10002() {
+  $config = \Drupal::configFactory()
+    ->getEditable('openid_connect.client.wwsumich');
+
+  $data = $config->getRawData();
+
+  // Do nothing if settings.testshib does not exist.
+  if (
+    !isset($data['settings']) ||
+    !is_array($data['settings']) ||
+    !array_key_exists('testshib', $data['settings'])
+  ) {
+    return;
+  }
+
+  $testshib = $data['settings']['testshib'];
+
+  if (in_array($testshib, [0, '0', FALSE], TRUE)) {
+    $oidc_well_known = 'https://shibboleth.umich.edu/.well-known/openid-configuration';
+  }
+  elseif (in_array($testshib, [1, '1', TRUE], TRUE)) {
+    $oidc_well_known = 'https://shib-idp-staging.dsc.umich.edu/.well-known/openid-configuration';
+  }
+  else {
+    // Preserve an unrecognized value rather than deleting it.
+    return;
+  }
+
+  $config
+    ->clear('settings.testshib')
+    ->set('settings.oidc_well_known', $oidc_well_known)
+    ->save(TRUE);
+}

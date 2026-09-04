@@ -14,6 +14,7 @@
     "minimum-stability": "dev",
     "require": {
 	"drupal/core": "^10.2 || ^11",
+        "drupal/externalauth": "^2.0.13",
         "drupal/openid_connect": "^3.0@alpha"
     }
 }
