@@ -28,7 +28,7 @@ function wwsauth_update_10001(): string {
 /**
  * Replaces the testshib setting with the appropriate discovery endpoint.
  */
-function umichoidc_update_10002() {
+function wwsauth_update_10002() {
   $config = \Drupal::configFactory()
     ->getEditable('openid_connect.client.wwsumich');
 
