@@ -11,4 +11,4 @@ settings:
   client_secret: ''
   iss_allowed_domains: ''
   roles: {  }
-  testshib: 0
+  oidc_well_known: 'https://shibboleth.umich.edu/.well-known/openid-configuration'

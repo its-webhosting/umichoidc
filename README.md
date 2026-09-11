@@ -18,9 +18,9 @@ umichoidc (wwsauth) is a Drupal module that extends the OpenID Connect (openid_c
 
 ## Versions
 
-* 3.x - This release of umichoidc (wwsauth) is dependent upon the [3.0.0-alpha6](https://www.drupal.org/project/openid_connect/releases/3.0.0-alpha6) release of the openid_connect module.  This version of umichoidc (wwsauth) has been tested with and is supported for Drupal 10.5+ through Drupal 11.
+* 3.x - This release of umichoidc (wwsauth) is dependent upon the [3.0.0-alpha6](https://www.drupal.org/project/openid_connect/releases/3.0.0-alpha6) release (or newer) of the openid_connect module.  This version of umichoidc (wwsauth) has been tested with and is supported for Drupal 10.5+ through Drupal 11.
 
-* 1.0.x - The initial release of umichoidc (wwsauth) was dependent upon the [8.x-1.4](https://www.drupal.org/project/openid_connect/releases/8.x-1.4) release of the openid_connect module.  This version works with Drupal 9.5 - 10.  This release is still supported currently for Drupal 10 sites in U-M Pantheon, although support for 1.0.x with Drupal 10 in U-M Pantheon will soon be updated to 3.x.
+* 1.0.x - The initial release of umichoidc (wwsauth) was dependent upon the [8.x-1.4](https://www.drupal.org/project/openid_connect/releases/8.x-1.4) release of the openid_connect module.  This version works with Drupal 9.5 - 10.  This release is still supported currently for Drupal 10 sites in U-M Pantheon, although support for 1.0.x with Drupal 10 in U-M Pantheon has been updated to 3.x.
 
 ## Features
 
@@ -42,7 +42,7 @@ umichoidc (wwsauth) is a Drupal module that extends the OpenID Connect (openid_c
 
 ### Install steps
 
-As of July 9, 2025, new Drupal 11 sites in U-M Pantheon via the [ITS Web Hosting Services Portal](https://admin.webservices.umich.edu/) are initialized with [openid_connect](https://www.drupal.org/project/openid_connect) and [umichoidc](https://github.com/its-webhosting/umichoidc) so no additional installation steps are required for those sites.  
+Since July 9, 2025, new Drupal 11 sites in U-M Pantheon via the [ITS Web Hosting Services Portal](https://admin.webservices.umich.edu/) are initialized with [openid_connect](https://www.drupal.org/project/openid_connect) and [umichoidc](https://github.com/its-webhosting/umichoidc) so no additional installation steps are required for those sites.  
 
 Drupal 10.5 sites created since that date had the older releases of `openid_connect` and `umichoidc` installed and will need to be manually upgraded.  See the [Drupal 10 Manual Upgrade Notes](#drupal10upgradenotes) below for more details.
 
