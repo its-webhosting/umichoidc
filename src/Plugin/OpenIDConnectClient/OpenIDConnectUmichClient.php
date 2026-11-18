@@ -105,7 +105,10 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
    * {@inheritdoc}
    */
   public function authorize(string $scope = 'openid email', array $additional_params = []): Response {
-    return parent::authorize('openid email edumember profile account_type');
+    return parent::authorize(
+	'openid email edumember profile account_type',
+	$additional_params
+	);
   }
 
   /**
@@ -122,13 +125,21 @@ class OpenIDConnectUmichClient extends OpenIDConnectClientBase {
     $client_id = $form_state->getValue('client_id');
     if ($client_id) {
       // Remove newlines and leading/trailing whitespace.
-      $form_state->setValue('client_id', preg_replace( "/\r|\n/", "", trim($client_id)));
+      $form_state->setValue(
+        'client_id',
+        preg_replace("/\r|\n/", "", trim($client_id))
+      );
     }
     $client_secret = $form_state->getValue('client_secret');
     if ($client_secret) {
       // Remove newlines and leading/trailing whitespace.
-      $form_state->setValue('client_secret', preg_replace( "/\r|\n/", "", trim($client_secret)));
+      $form_state->setValue(
+        'client_secret',
+        preg_replace("/\r|\n/", "", trim($client_secret))
+      );
     }
+    // Let the parent filter unchecked prompt checkbox values.
+    parent::submitConfigurationForm($form, $form_state);
   }
 
 }
